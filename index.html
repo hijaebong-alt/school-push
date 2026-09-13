@@ -44,7 +44,7 @@
                     
                     // VAPID 키 입력 (Step 3에서 발급받은 키)
                     messaging.getToken({ vapidKey: 'BCWXNxnW6g8n1StAiey71CAQGbdn_7TMCXEjD98EU0-zvWltLl_RRMcwlFSGSYFT0p648GL8BaOuiwfh0yK-1dA' })
-                        .then((currentToken) => {
+                           .then((currentToken) => {
                             if (currentToken) {
                                 document.getElementById('status').innerText = "알림 설정 완료! 정상적으로 등록되었습니다.";
                                 console.log('FCM 토큰:', currentToken);
