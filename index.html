@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>알림 받기</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; margin-top: 50px; padding: 20px; }
+        button { padding: 15px 30px; font-size: 18px; background-color: #4CAF50; color: white; border: none; border-radius: 8px; cursor: pointer; }
+        button:hover { background-color: #45a049; }
+        #status { margin-top: 20px; color: #555; }
+    </style>
+</head>
+<body>
+
+    <h2>전달사항 알림 받기</h2>
+    <p>아래 버튼을 눌러 알림을 허용해 주세요.</p>
+    <button onclick="requestPermission()">알림 허용하기</button>
+    <div id="status"></div>
+
+    <!-- Firebase SDK 로드 -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-messaging-compat.js"></script>
+
+    <script>
+        // 1. 파이어베이스 설정값 입력
+        const firebaseConfig = {
+            apiKey: "AIzaSyAxhSVNo3_MCCYAj36q8muRZRNAgEaavsk",
+            authDomain: "school-push-app.firebaseapp.com",
+            projectId: "school-push-app",
+            storageBucket: "school-push-app.firebasestorage.app",
+            messagingSenderId: "596227808764",
+            appId: "1:596227808764:web:ac61982805cfd5bf92a679"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const messaging = firebase.messaging();
+
+        // 2. 알림 권한 요청 및 토큰 발급 함수
+        function requestPermission() {
+            Notification.requestPermission().then((permission) => {
+                if (permission === 'granted') {
+                    console.log('알림 권한이 허용되었습니다.');
+                    
+                    // VAPID 키 입력 (Step 3에서 발급받은 키)
+                    messaging.getToken({ vapidKey: 'YBCWXNxnW6g8n1StAiey71CAQGbdn_7TMCXEjD98EU0-zvWltLl_RRMcwlFSGSYFT0p648GL8BaOuiwfh0yK-1dA' })
+                        .then((currentToken) => {
+                            if (currentToken) {
+                                document.getElementById('status').innerText = "알림 설정 완료! 정상적으로 등록되었습니다.";
+                                console.log('FCM 토큰:', currentToken);
+                                
+                                // 💡 중요: 20명의 학생 각각의 이 'currentToken'을 선생님이 알아야 
+                                // 나중에 그 토큰으로 메시지를 쏠 수 있습니다. 
+                                // (간단하게는 이 토큰을 화면에 띄워주고 선생님께 카톡으로 보내달라고 하거나, DB에 저장하면 됩니다.)
+                                alert("등록 성공! 콘솔(F2)이나 화면을 확인하세요.");
+                            } else {
+                                document.getElementById('status').innerText = "토큰을 가져오지 못했습니다.";
+                            }
+                        })
+                        .catch((err) => {
+                            document.getElementById('status').innerText = "토큰 발급 중 에러 발생";
+                            console.log('토큰 발급 에러:', err);
+                        });
+                } else {
+                    alert('알림 권한을 거부하셨습니다. 브라우저 설정에서 허용해 주세요.');
+                }
+            });
+        }
+
+        // 서비스 워커 등록
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('firebase-messaging-sw.js')
+                .then((registration) => {
+                    console.log('서비스 워커 등록 성공:', registration);
+                })
+                .catch((err) => {
+                    console.log('서비스 워커 등록 실패:', err);
+                });
+        }
+    </script>
+</body>
+</html>
