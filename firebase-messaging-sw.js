@@ -4,12 +4,12 @@ importScripts('https://www.gstatic.com/firebasejs/10.8.0/firebase-messaging-comp
 
 // 아까 파이어베이스 설정에서 복사해 둔 값들을 여기에 넣습니다.
 firebase.initializeApp({
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_AUTH_DOMAIN",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_STORAGE_BUCKET",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyAxhSVNo3_MCCYAj36q8muRZRNAgEaavsk",
+  authDomain: "school-push-app.firebaseapp.com",
+  projectId: "school-push-app",
+  storageBucket: "school-push-app.firebasestorage.app",
+  messagingSenderId: "596227808764",
+  appId: "1:596227808764:web:ac61982805cfd5bf92a679"
 });
 
 const messaging = firebase.messaging();
